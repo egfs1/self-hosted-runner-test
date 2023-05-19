@@ -1,0 +1,35 @@
+﻿name: .NET Core Deploy to IIS
+
+on: 
+  push:
+     branches:
+     - "master"
+ #workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+
+    runs-on: self-hosted
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    
+    # dotnet build and publish
+    - name: Build with dotnet
+      run: dotnet build --configuration Release .\publish
+
+    - name: dotnet publish 
+      run: |
+        dotnet publish -c Release -o WebApp .\publish
+
+    - name: Deploy to IIS
+      run: |
+        Import-Module WebAdministration
+        Stop-Website 'self-hosted-runner-test'
+        Copy-Item ./publish/* C:/www/WebApp -Recurse -Force
+        Start-Website 'self-hosted-runner-test'
