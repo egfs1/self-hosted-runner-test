@@ -29,7 +29,8 @@ jobs:
 
     - name: Deploy to IIS
       run: |
-        Import-Module WebAdministration
-        Stop-Website 'self-hosted-runner-test'
+        stop-webapppool self-hosted-runner-test
+        stop-iissite self-hosted-runner-test
         Copy-Item ./publish/* C:/www/WebApp/ -Recurse -Force
-        Start-Website 'self-hosted-runner-test'
+        start-webapppool self-hosted-runner-test
+        start-iissite self-hosted-runner-test
