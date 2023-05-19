@@ -30,7 +30,7 @@ jobs:
     - name: Deploy to IIS
       run: |
         stop-webapppool self-hosted-runner-test
-        stop-iissite self-hosted-runner-test
+        stop-iissite -Name self-hosted-runner-test -Confirm: $false
         Copy-Item ./publish/* C:/www/WebApp/ -Recurse -Force
         start-webapppool self-hosted-runner-test
         start-iissite self-hosted-runner-test
