@@ -21,15 +21,15 @@ jobs:
     
     # dotnet build and publish
     - name: Build with dotnet
-      run: dotnet build --configuration Release .\WebApp
+      run: dotnet build --configuration Release .\WebApp.csproj
 
     - name: dotnet publish 
       run: |
-        dotnet publish -c Release -o WebApp .\WebApp
+        dotnet publish -c Release -o .\publish .\WebApp.csproj
 
     - name: Deploy to IIS
       run: |
         Import-Module WebAdministration
         Stop-Website 'self-hosted-runner-test'
-        Copy-Item ./WebApp/* C:/www/WebApp -Recurse -Force
+        Copy-Item ./publish/* C:/www/WebApp -Recurse -Force
         Start-Website 'self-hosted-runner-test'
