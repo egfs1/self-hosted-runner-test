@@ -31,5 +31,5 @@ jobs:
       run: |
         Import-Module WebAdministration
         Stop-Website 'self-hosted-runner-test'
-        Copy-Item ./publish/* C:/www/WebApp -Recurse -Force
+        Copy-Item ./publish/* C:/www/WebApp/ -Recurse -Force
         Start-Website 'self-hosted-runner-test'
