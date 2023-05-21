@@ -26,6 +26,7 @@ jobs:
         try{
           stop-iissite -Name self-hosted-runner-test -Confirm: $false
           stop-webapppool self-hosted-runner-test
+          while((Get-WebAppPoolState -Name self-hosted-runner-test).Value -ne 'Stopped'){ Start-Sleep 1 }
           Copy-Item ./publish/* C:/www/WebApp/ -Recurse -Force
         }
         catch{
