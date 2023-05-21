@@ -30,8 +30,9 @@ jobs:
           Copy-Item ./publish/* C:/www/WebApp/ -Recurse -Force
         }
         catch{
-            Write-Host "An error occurred:"
+            die "An error occurred:\n" $_
             Write-Host $_
+            exit 1
         }
         finally{
           start-webapppool self-hosted-runner-test
