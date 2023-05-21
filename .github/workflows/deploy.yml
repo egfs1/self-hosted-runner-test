@@ -30,7 +30,7 @@ jobs:
           Copy-Item ./publish/* C:/www/WebApp/ -Recurse -Force
         }
         catch{
-            die "An error occurred:\n" $_
+            Host "An error occurred:\n"
             Write-Host $_
             exit 1
         }
