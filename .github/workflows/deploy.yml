@@ -2,8 +2,7 @@
 
 on: 
   push:
-     branches:
-     - "master"
+     branches: ["master"]
  #workflow_dispatch:
 
 jobs:
@@ -13,11 +12,6 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
     
     # dotnet build and publish
     - name: Build with dotnet
@@ -29,8 +23,16 @@ jobs:
 
     - name: Deploy to IIS
       run: |
-        stop-webapppool self-hosted-runner-test
-        stop-iissite -Name self-hosted-runner-test -Confirm: $false
-        Copy-Item ./publish/* C:/www/WebApp/ -Recurse -Force
-        start-webapppool self-hosted-runner-test
-        start-iissite self-hosted-runner-test
+        try{
+          stop-iissite -Name self-hosted-runner-test -Confirm: $false
+          stop-webapppool self-hosted-runner-test
+          Copy-Item ./publish/* C:/www/WebApp/ -Recurse -Force
+        }
+        catch{
+            Write-Host "An error occurred:"
+            Write-Host $_
+        }
+        finally{
+          start-webapppool self-hosted-runner-test
+          start-iissite self-hosted-runner-test
+        }
